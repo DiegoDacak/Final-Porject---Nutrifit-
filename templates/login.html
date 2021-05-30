@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Inicia sesión o registrate
+{% endblock %}
+
+{% block main %}
+    <main class="container p-5" style="filter: brightness(100%) !important;">
+        <form action="/login" method="post">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Nombre de usuario" type="text">
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="password" placeholder="Contraseña" type="password">
+            </div>
+            {% if aviso %}
+                <div class="alert alert-danger form-group aviso" role="alert">
+                    {{ aviso }}
+                </div>
+            {% endif %}
+            <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+            {% if aviso_registro %}
+                <div class="alert alert-success form-group aviso" style="margin-top: 1rem" role="alert">
+                    {{ aviso_registro }}
+                </div>
+            {% endif %}
+        </form>
+    </main>
+{% endblock %}

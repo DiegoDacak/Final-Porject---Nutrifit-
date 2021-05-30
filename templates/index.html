@@ -1,0 +1,162 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Registro
+{% endblock %}
+
+{% block main %}
+    <main class="container p-5" style="filter: brightness(100%) !important;">
+        <div class="border-bottom border-dark" style="display: flex;">
+            <h1 class="comidas"><b>Comidas del día</b></h1>
+            <div style="margin-left: auto;">
+                <form action="/delete" method='get'>
+                    <button type="submit" class="btn btn-primary" style="height: calc(1.5em + .75rem + 2px); margin-bottom: 0.2rem; font-size: 1rem"><b>Reiniciar</b></button>
+                </form>
+            </div>
+        </div>
+        <form id="form_index" action="/" method="post">
+            {% if registros %}
+                <table class="tabla_index">
+                    <tr class="tr_index">
+                        <th class="th_index"><b>Comidas</b></th>
+                        <th class="th_index"><b>Calorias</b></th>
+                        <th class="th_index"><b>Proteinas</b></th>
+                    </tr>
+                    {% for registro in registros %}
+                        <tr class="tr_index">
+                            <td class="td_index"><b>{{ registro.food }}</b></td>
+                            <td class="td_index"><b>{{ registro.calorie }}</b></td>
+                            <td class="td_index"><b>{{ registro.protein }}</b></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <!--Numero de calorias restantes-->
+                <div style="display: flex; margin-top: 1rem">
+                    <b><h>Total de calorias consumidas: {{total_calorie }}</h></b>
+                    {% if user_calorie %}
+                        <b><h id="user_calorie"></h></b>
+                    {% endif %}
+                </div>
+                <div style="display: flex; margin-top: 1rem">
+                    <b><h>Total de proteinas consumidas: {{ total_protein }}</h></b>
+                    {% if user_protein %}
+                        <b><h id="user_protein"></h></b>
+                    {% endif %}
+                </div>
+
+            {% endif %}
+            <div style="display: flex">
+                <div>
+                    <div class = "contenedor-comidas" style="margin-top: 1rem;">
+
+                        <div style="display: flex" id="index_alimentos" class="index_alimentos active">
+                            <select onchange="funcion_unidad()" id="eleccion_comidas" name="comida" class="form-control" style="margin-right: 0.5rem; width: 7rem">
+                                <option disabled selected>Comidas</option>
+                                {% for comida in comidas %}
+                                    <option>{{ comida.food }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-group mb-3"  style="width: 7rem; margin-right: 0.5rem">
+                                <input id="porcion_comidas" name="porcion_comida" type="number" min=1 class="form-control">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="unidad_medida"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex" id="index_recetas" class="index_recetas active">
+                            <select id="eleccion_recetas" name="receta" class="form-control" style="margin-right: 0.5rem; width: 7rem">
+                                <option disabled selected>Recetas</option>
+                                {% for receta in recetas %}
+                                    <option>{{ receta.recipe }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-group mb-3"  style="width: 7rem; margin-right: 0.5rem">
+                                <input id="porcion_recetas" name="porcion_receta" type="number" min=1 class="form-control">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Por</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="height: calc(1.5em + .75rem + 2px)"><b>Agregar</b></button>
+                    </div>
+                    <div style="display: flex" class="from-control">
+                        <input style="margin-top: auto; margin-bottom: auto; margin-right: 0.3rem" type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
+                        <label style="margin-top: auto; margin-bottom: auto;" class="btn btn-outline-success" for="btn-check-outlined" onclick="utilizar_recetas()"><b>Utilizar recetas</b></label><br>
+                    </div>
+                    {% if aviso %}
+                    <div class="alert alert-danger form-group aviso" style="margin-top: 1rem" role="alert">
+                        {{ aviso }}
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function utilizar_recetas() {
+            document.getElementById("unidad_medida").innerHTML = "";
+            var index_alimentos = document.getElementById("index_alimentos");
+            document.getElementById("eleccion_comidas").selectedIndex = "0";
+            document.getElementById("porcion_comidas").value = "";
+            var index_recetas = document.getElementById("index_recetas");
+            document.getElementById("eleccion_recetas").selectedIndex = "0";
+            document.getElementById("porcion_recetas").value = "";
+            if (document.getElementById("btn-check-outlined").checked == true){
+                index_alimentos.classList.remove("active");
+                index_recetas.classList.add("active");
+            } else {
+                index_alimentos.classList.add("active");
+                index_recetas.classList.remove("active");
+            }
+        }
+
+        function funcion_unidad() {
+            var x = document.getElementById("eleccion_comidas").value;
+            {% for comida in comidas %}
+                if ("{{ comida.food }}" == x) {
+                    x = "{{ comida.unit }}"
+                }
+            {% endfor %}
+            unit = document.getElementById("unidad_medida");
+            unit.innerHTML = x;
+        }
+
+        function restantes_calorias() {
+            var user_calorie = document.getElementById("user_calorie");
+            var calorias = parseFloat("{{user_calorie}}");
+            if (calorias < 0) {
+                user_calorie.setAttribute("style", "color: green");
+            }
+            else if (calorias > 0) {
+                user_calorie.setAttribute("style", "color: red");
+                user_calorie.innerHTML = "&nbsp&nbsp+{{user_calorie}}";
+                return;
+            }
+            else {
+                user_calorie.setAttribute("style", "colog: black")
+            }
+            user_calorie.innerHTML = "&nbsp&nbsp{{user_calorie}}";
+        }
+
+        function restantes_proteinas() {
+            var user_protein = document.getElementById("user_protein");
+            var proteinas = parseFloat("{{user_protein}}");
+            if (proteinas < 0) {
+                user_protein.setAttribute("style", "color: green");
+            }
+            else if (proteinas > 0) {
+                user_protein.setAttribute("style", "color: red");
+                user_protein.innerHTML = "&nbsp&nbsp+{{user_protein}}";
+                return;
+            }
+            else {
+                user_protein.setAttribute("style", "colog: black")
+            }
+            user_protein.innerHTML = "&nbsp&nbsp{{user_protein}}";
+        }
+
+    </script>
+
+{% endblock %}

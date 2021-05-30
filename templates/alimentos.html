@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Alimentos
+{% endblock %}
+
+{% block main %}
+
+    <main class="container p-5" style="filter: brightness(100%) !important;">
+        <div class="alert alert-success" role="alert">
+            Si quieres agregar algun alimento puedes hacer click <button class="btn btn-primary" onclick="abrir_forma()">aquí</button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+            {% for alimento in alimentos %}
+                <div style="margin-top: 0.5rem" class="alimentos">
+                    <img class="imagen_alimento" src="{{ alimento.image_url }}">
+                    <h style="color: white; width: 10rem"><b>{{ alimento.food }}</b></h>
+                </div>
+            {% endfor %}
+        </div>
+
+    </main>
+
+
+    <div class="overlay" id="overlay">
+        <div class="forma">
+            <form id="forma" action="/alimentos" method="post" class="form-horizontal" role="form">
+                <h2>Alimento</h2>
+                <div class="form-group" style="display: flex; margin-top: 1rem">
+                    <label class="col-sm-3 control-label">Nombre:</label>
+                    <input autocomplete="off" name="food" type="text" id="receta" placeholder="Nombre del alimento" class="form-control" autofocus required>
+                </div>
+                <div class="form-group" style="display: flex; margin-top: 0.5rem">
+                    <label class="col-sm-3 control-label">URL de la imagen:</label>
+                    <input autocomplete="off" name="image_url" type="text" id="image_url" placeholder="Copia la url de la imagen" class="form-control" required>
+                </div>
+                <div class="form-group" style="display: flex; margin-top: 0.5rem">
+                    <label class="col-sm-3 control-label">Unidad de medida:</label>
+                    <input autocomplete="off" name="unit" type="text" id="image_url" placeholder="Ingrese el simbolo" class="form-control" required>
+
+                    <label class="control-label porcion">Porción:</label>
+                    <input autocomplete="off" step="0.01" type="number" min=0 name="gramos" type="text" id="image_url" placeholder="Inserta la cantidad" class="form-control" required>
+                </div>
+                <div class="form-group" style="display: flex; margin-top: 0.5rem">
+                    <label class="col-sm-3 control-label">Proteinas:</label>
+                    <input autocomplete="off" type="number" step="0.01" min=0 name="protein" type="text" id="image_url" class="form-control" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text">gr</span>
+                    </div>
+                    <label class="col-sm-3 control-label">Valor energético:</label>
+                    <input autocomplete="off" type="number" step="0.01" min=0 name="calorie" type="text" id="image_url" class="form-control" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text">kcal</span>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: flex; margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primary" style="margin-left: 1rem">Guardar alimento</button>
+                    <h onclick="cerrar_forma()" class="btn btn-primary" style="margin-left: 1rem">Cerrar<h>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

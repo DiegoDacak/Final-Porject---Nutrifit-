@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+
+    {{usernames}}
+    <main class="container p-5" style="filter: brightness(100%) !important;">
+        <form class="registro" action="/registro" method="post">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="name" placeholder="Nombre" type="text" required>
+                <input autocomplete="off" class="form-control" name="last_name" placeholder="Apellido" type="text" required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" style="width: calc(100%)" autocomplete="off" autofocus name="username" placeholder="Nombre de usuario" type="text" required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="password" placeholder="Contraseña" type="password" required>
+                <input class="form-control" name="confirmation" placeholder="Confirmación" type="password" required>
+            </div>
+            {% if aviso %}
+                <div class="alert alert-danger aviso" role="alert">
+                    {{ aviso }}
+                </div>
+            {% endif %}
+            <button class="btn btn-primary" type="submit">Registrarte</button>
+        </form>
+    </main>
+{% endblock %}

@@ -1,0 +1,243 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Recetas
+{% endblock %}
+
+{% block main %}
+    <main class="container p-5" style="filter: brightness(100%) !important;">
+        <div class="alert alert-success" role="alert">
+            Si quieres agregar alguna receta puedes hacer click <button class="btn btn-primary" onclick="abrir_forma()">aquí</button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+            {% for receta in recetas %}
+                <div class="alimentos">
+                    <h style="color: white; width: 17rem"><b>{{ receta.recipe }}</b></h>
+                    <button  id="{{receta.recipe}}" onclick = "mostrar_ingredientes(this.id)">
+                        <img class="imagen_receta" src="{{ receta.image_url }}">
+                    </button>
+                    <footer class="small" style = "width: 17rem">
+                        <h style="color: white">{{ receta.description }}</h>
+                    </footer>
+                </div>
+            {% endfor %}
+        </div>
+
+    </main>
+
+
+    <div class="overlay" id="overlay_2">
+        <div class="forma">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Ingrediente</th>
+                        <th scope="col">Porción</th>
+                    </tr>
+                </thead>
+                <tbody id = "tabla_ingredientes">
+                </tbody>
+            </table>
+            <div style="display: flex">
+                <button type="submit" onclick="ocultar_ingredientes()" class="btn btn-primary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="overlay" id="overlay">
+        <div class="forma">
+            <form id="forma" action="/recetas" method="post" class="form-horizontal" role="form">
+                <h2>Receta</h2>
+                <div class="form-group" style="display: flex; margin-top: 1rem">
+                    <label class="col-sm-3 control-label">Nombre:</label>
+                    <input autocomplete="off" name="recipe" type="text" id="receta" placeholder="Nombre de la receta" class="form-control" required>
+                </div>
+                <div class="form-group" style="display: flex; margin-top: 1rem">
+                    <label class="col-sm-3 control-label">Descripción:</label>
+                    <input autocomplete="off" name="description" type="text" id="description" name="recipe" placeholder="Puedes agregar una pequeña descripcion" class="form-control">
+                </div>
+                <div class="form-group" style="display: flex; margin-top: 0.5rem">
+                    <label class="col-sm-3 control-label">URL de la imagen:</label>
+                    <input autocomplete="off" name="image_url" type="text" id="image_url" placeholder="Pega la url de la imagen" class="form-control" required>
+                </div>
+                <div class="form-group" style="display: flex; margin-top: 0.5rem">
+                    <label class="col-sm-3 control-label">Porciones:</label>
+                    <input autocomplete="off" step=0.01 type="number" placeholder="Ingresa la cantidad de porciones que tendra la receta" min=0.01 name="portion" class="form-control" required>
+                </div>
+
+                <div id="ingredientes">
+                    <div class="form-group ingredientes">
+                            <label class="col-sm-3 control-label">Ingrediente 1:</label>
+
+                            <select id="ingrediente_1" class="form-control" name="ingrediente_1" onchange="unidad_medida(this.id)">
+                                    <option id="opciones" disabled selected>Seleccione el ingrediente</option>
+                                    {% for ingrediente in ingredientes %}
+                                        <option>{{ ingrediente.food }}</option>
+                                    {% endfor %}
+                            </select>
+
+                            <label id="porcion" class="control-label porcion">Porción:</label>
+                            <input id="gramos" autocomplete="off" step=0.01 type="number" min=0.01 name="portion_1" class="form-control gramos" required>
+                            <div id="div_unit" class="input-group-append">
+                                <span class="input-group-text" id="unidad_ingrediente_1"></span>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: flex; margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primary" style="margin-left: 1rem">Guardar receta</button>
+                    <div>
+                        <h onclick="agregar_ingrediente()" class="btn btn-primary" style="margin-left: 1rem;">Agregar ingredientes<h>
+                    </div>
+                    <h onclick="cerrar_forma()" class="btn btn-primary" style="margin-left: 1rem">Cerrar<h>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <script>
+
+        function mostrar_ingredientes(receta_buscada) {
+
+            //Receta de la que queremos saber los ingredientes
+            var x = receta_buscada;
+
+            // Variables que utilizaremos para crear la tabla
+            var tr = [];
+            var th = [];
+            var td_1 = [];
+            var td_2 = [];
+            var ingrediente;
+
+
+            {% for receta in recetas %}
+                if (x == "{{  receta.recipe }}") {
+                    {% for key, value in receta.items() %}
+                        if ("{{key}}" == "ingrediente_" + counter_ing) {
+                            {% if value %}
+                                // Creamos los elementos
+                                tr[counter_ing] = document.createElement("tr");
+                                th[counter_ing] = document.createElement("th");
+                                td_1[counter_ing] = document.createElement("td");
+
+                                // Numero de ingrediente
+                                th[counter_ing].innerHTML = counter_ing;
+                                tr[counter_ing].appendChild(th[counter_ing]);
+
+                                // Ingrediente
+                                ingrediente = "{{value}}"
+                                td_1[counter_ing].innerHTML = "{{value}}";
+                                tr[counter_ing].appendChild(td_1[counter_ing]);
+                            {% endif %}
+                        }
+                        if ("{{key}}" == "portion_" + counter_ing) {
+                            {% if value %}
+                                td_2[counter_ing] = document.createElement("td");
+                                td_2[counter_ing].innerHTML = "{{value}} " + unidad(ingrediente);
+                                tr[counter_ing].appendChild(td_2[counter_ing]);
+                                document.getElementById("tabla_ingredientes").appendChild(tr[counter_ing]);
+                                counter_ing ++;
+                            {% endif %}
+                        }
+                    {% endfor %}
+                }
+            {% endfor %}
+            document.getElementById("overlay_2").classList.add("active");
+        }
+
+
+        function agregar_ingrediente() {
+            counter ++;
+            // Creamos el elemento div padre para luego poder eliminarlo
+            var div = document.createElement("div");
+            div.setAttribute("id", "padre");
+            div.classList.add("form-group");
+            div.classList.add("ingredientes");
+
+            // Creamos la etiqueta de ingrediente
+            var label = document.createElement("label");
+            label.classList.add("col-sm-3");
+            label.classList.add("control-label");
+            label.innerHTML = "Ingrediente " + counter + ":";
+
+            // Creamos la etiqueta select
+            var select = document.createElement("select");
+            select.classList.add("form-control");
+            select.setAttribute("name", "ingrediente_" + counter);
+            select.setAttribute("id", "ingrediente_" + counter);
+            select.setAttribute("onchange", "unidad_medida(this.id)");
+
+            // Creamos la etiqueta de opciones
+            var opciones = document.getElementById("opciones");
+            opciones = opciones.cloneNode(true);
+            select.appendChild(opciones);
+
+            // Creamos las opciones
+            {% for ingrediente in ingredientes %}
+                var option = document.createElement("option");
+                option.innerHTML = "{{ ingrediente.food }}";
+                select.appendChild(option);
+            {% endfor %}
+
+            // Creamos la etiqueta de porcion
+            var porcion = document.getElementById("porcion");
+            porcion = porcion.cloneNode(true);
+
+            // Creamos la etiqueta de gramos
+            var gramos = document.getElementById("gramos");
+            gramos = gramos.cloneNode(true);
+            gramos.removeAttribute("name");
+            gramos.setAttribute("name", "portion_" + counter);
+
+            // Creamos la etiqueta de unidad
+            var div_unit = document.createElement("div");
+            div_unit.classList.add("input-group-append");
+            span_unit = document.createElement("span");
+            span_unit.setAttribute("id", "unidad_ingrediente_" + counter);
+            span_unit.classList.add("input-group-text");
+            div_unit.appendChild(span_unit);
+
+            div.appendChild(label);
+            div.appendChild(select);
+            div.appendChild(porcion);
+            div.appendChild(gramos);
+            div.appendChild(div_unit);
+
+
+            // Agregamos los nodos
+            document.getElementById("ingredientes").appendChild(div);
+        }
+
+
+        function unidad_medida(ingrediente_id) {
+            var unidad;
+            var x = document.getElementById(ingrediente_id).value;
+            {% for ingrediente in ingredientes %}
+                if ("{{ ingrediente.food }}" == x) {
+                    x = "{{ ingrediente.unit }}"
+                }
+            {% endfor %}
+            unit = document.getElementById("unidad_" + ingrediente_id);
+            unit.innerHTML = x;
+        }
+
+        function unidad(alimento) {
+            var unidad;
+            {% for ingrediente in ingredientes %}
+                if ("{{ ingrediente.food }}" == alimento) {
+                    unidad = "{{ ingrediente.unit }}"
+                }
+            {% endfor %}
+            return unidad;
+        }
+
+    </script>
+{% endblock %}
+

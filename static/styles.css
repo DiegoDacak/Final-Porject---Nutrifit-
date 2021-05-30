@@ -1,0 +1,287 @@
+.contenedor {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+}
+
+.contenedor.carga {
+    visibility: hidden;
+}
+
+.imagen_fondo {
+    background-image: url('/static/background-image.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    flex-grow: 1;
+}
+
+main .form-control
+{
+    /* Center form controls */
+    display: inline-block;
+
+    /* Override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    /* Scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* Center contents */
+    text-align: center;
+}
+
+nav .navbar-brand span
+{
+    /* size for brand */
+    font-size: xx-large;
+
+    font-family: fantasy;
+
+    color: green;
+}
+
+.registro
+{
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+input
+{
+    margin-right: 1rem;
+}
+
+
+.aviso
+{
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.comidas
+{
+    color: green;
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+.contenedor-comidas
+{
+    display: flex;
+}
+
+.tabla_index
+{
+    width: 100%;
+}
+
+.td_index, .th_index
+{
+  padding: 0.3rem;
+  border: 1px solid black;
+}
+
+.tr_index:nth-child(even)
+{
+  background-color: #dddddd;
+}
+
+.tr_index:nth-child(odd)
+{
+  background-color: #B7FFB6;
+}
+
+.overlay
+{
+	background-color: rgba(0,0,0,.3);
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	visibility: hidden;
+}
+
+.overlay.active {
+	visibility: visible;
+}
+
+.forma
+{
+	background: #F8F8F8;
+	box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+	border-radius: 3px;
+	padding: 1rem;
+	text-align: center;
+	transform: scale(0.7);
+	width: 50rem;
+    min-width: 30rem;
+}
+
+.alimentos
+{
+    background-color: rgba(0,0,0,.4);
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+}
+
+.imagen_alimento
+{
+    width: 10rem;
+    height: 10rem;
+}
+
+label.col-sm-3.control-label
+{
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 1rem;
+}
+
+div.form-group.ingredientes
+{
+    display: flex;
+    margin-top: 0.5rem;
+}
+
+.porcion
+{
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 0.3rem;
+    margin-left: 0.3rem;
+}
+
+.gramos
+{
+    max-width: 5rem;
+}
+
+.div_opciones
+{
+    display: flex;
+    flex-grow: 1;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.imagen_receta
+{
+    width: 17rem;
+    height: 10rem;
+}
+
+.index_recetas {
+    visibility: visible;
+    position: relative;
+}
+
+.index_recetas.active {
+    visibility: hidden;
+    position: relative;
+}
+
+.index_alimentos {
+    visibility: visible;
+    position: absolute;
+}
+
+.index_alimentos.active {
+    visibility: hidden;
+    position: absolute;
+}
+
+.calculadora_forma {
+    margin-top: 0.3rem;
+    background: rgba(255,255,255,0.8) !important;
+    border-width: 2px;
+    border-color: rgba(235,235,235,1);
+    border-style: solid;
+    border-radius: 0px;
+	max-width: 40rem;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.calculadora_titulo {
+    padding: 0.5rem;
+    font-size: 1.3rem;
+    color: rgba(0,0,0,1) !important;
+    background-color: rgba(235,235,235,1);
+}
+
+.calculadora_label {
+    display: flex;
+    margin-left: 1rem;
+}
+
+.form-control.calculadora_input {
+    width: 18rem;
+    height: 1.8rem;
+    margin-left: 1rem;
+    font-weight: bold;
+}
+
+.calculadora_dato {
+    font-size: 1rem;
+    color: red;
+    margin-left: 1rem;
+    font-weight: bold;
+}
+
+/*Loading Spinner*/
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.loading::after {
+  content: "";
+  width: 10rem;
+  height: 10rem;
+  border: 10px solid #dddddd;
+  border-top-color: #009579;
+  border-bottom-color: #009579;
+  border-radius: 50%;
+  animation: loading 1s ease infinite;
+}
+
+@keyframes loading {
+ to {
+    transform: rotate(1turn);
+  }
+}
+
+.loading.oculto {
+    visibility: hidden;
+}
